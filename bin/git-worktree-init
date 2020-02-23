@@ -75,12 +75,16 @@ remove () {
     fi
 }
 
+list () {
+    listconfig
+}
+
 showhelp () {
     cat <<EOF
 Submodule-like configuration of git worktrees.
 
 Usage:
-    git worktree-init [init | -h]
+    git worktree-init [init | list | -h]
     git worktree-init add <path> <commit-ish>
     git worktree-init remove <path>
 EOF
@@ -108,6 +112,9 @@ while [ "$#" -gt 0 ]; do
             path=$1; shift 1
 
             action=remove
+            ;;
+        list)
+            action=list
             ;;
         *)
             showhelp
