@@ -1,5 +1,6 @@
-{ pkgs ? import <nixpkgs> {  }}:
+{ pkgs ? import <nixpkgs> {} }:
 
 let
   overlay = import ./overlay.nix;
-in (pkgs.extend overlay).git-worktree-init
+in
+(pkgs.extend overlay).git-worktree-init

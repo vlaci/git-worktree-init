@@ -1,3 +1,3 @@
 self: super: {
-  git-worktree-init = self.callPackage ./derivation.nix { };
+  git-worktree-init = self.callPackage ./derivation.nix {};
 }
