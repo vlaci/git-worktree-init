@@ -21,9 +21,9 @@ setuptree () {
     local tree=$1
 
     local ref=
-    ref="$(gitconfig $tree.ref || true)"
+    ref="$(gitconfig "$tree.ref" || true)"
     local path=
-    path="$(gitconfig $tree.path || true)"
+    path="$(gitconfig "$tree.path" || true)"
 
     [[ -n $ref ]] || { echo "'$t.ref' entry is missing"; exit 1; }
     [[ -n $path ]] || { echo "'$t.path' entry is missing"; exit 1; }
@@ -42,7 +42,7 @@ setuptree () {
     else
         if [[ "$(git worktree list --porcelain)" == *"$path"* ]]; then
             echo "Removing stale worktree configuration"
-            git worktree remove $path
+            git worktree remove "$path"
         fi
         git worktree add "$path" "$ref"
     fi
@@ -72,7 +72,7 @@ remove () {
 
     if [[ "$(git worktree list --porcelain)" == *"$path"* ]]; then
         echo "Removing stale worktree configuration"
-        git worktree remove $path
+        git worktree remove "$path"
     fi
 }
 
