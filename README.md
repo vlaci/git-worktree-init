@@ -9,7 +9,7 @@ documentation branch of the given repository in the `doc` directory. The command
 creates a file named `.gitworktrees`:
 
 ``` ini
-[worktree "doc-branch"]
+[worktree "doc"]
      path = doc
      ref = documentation
 ```
