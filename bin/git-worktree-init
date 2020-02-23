@@ -13,10 +13,6 @@ listconfig () {
     done < <(gitconfig --name-only --get-regexp "worktree\..*\.path")
 }
 
-worktrees=
-mapfile -t worktrees < <(listconfig)
-
-
 setuptree () {
     local tree=$1
 
@@ -49,6 +45,9 @@ setuptree () {
 }
 
 init () {
+    worktrees=
+    mapfile -t worktrees < <(listconfig)
+
     for t in  "${worktrees[@]}"; do
         setuptree "$t"
     done
