@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+gitconfig () {
+    git config --file .gitworktrees "$@"
+}
+
+
+listconfig () {
+    while read -r; do
+        echo "${REPLY%.*}"
+    done < <(gitconfig --list --name-only)
+}
+
+worktrees=
+mapfile -t worktrees < <(listconfig | uniq)
+
+
+setuptree () {
+    local ref=$1
+    local path=$2
+
+    if [[ -e "$path/.git" ]]; then
+        local current_ref=
+        current_ref=$(GIT_DIR=$path/.git git rev-parse --abbrev-ref HEAD)
+        if [[ "$(git worktree list --porcelain)" == *"$path"* ]]; then
+            if [[ "$current_ref" != "$ref" ]]; then
+                GIT_DIR=$path/.git git checkout "$ref"
+            fi
+        else
+            echo "Existing path '$path' is not a worktree"
+            exit 1
+        fi
+    else
+        if [[ "$(git worktree list --porcelain)" == *"$path"* ]]; then
+            echo "Removing stale worktree configuration"
+            git worktree remove $path
+        fi
+        git worktree add "$path" "$ref"
+    fi
+}
+
+init () {
+    for t in  "${worktrees[@]}"; do
+        setuptree "$(gitconfig $t.ref)" "$(gitconfig $t.path)"
+    done
+}
+
+showhelp () {
+    echo "Usage: git worktree-init [-h]"
+}
+
+while [ "$#" -gt 0 ]; do
+    i="$1"; shift 1
+
+    case "$i" in
+        -h)
+            showhelp
+            exit
+            ;;
+        *)
+            showhelp
+            exit 1
+            ;;
+    esac
+done
+
+init
