@@ -4,7 +4,9 @@ Submodule-like configuration of git worktrees.
 
 ## Usage
 
-Given the following `.gitworktrees` file in a repository:
+Executing the command `git-wokrtree-init add doc documentation` registers the
+documentation branch of the given repository in the `doc` directory. The command
+creates a file named `.gitworktrees`:
 
 ``` ini
 [worktree "doc-branch"]
@@ -12,5 +14,5 @@ Given the following `.gitworktrees` file in a repository:
      ref = documentation
 ```
 
-Executing `git-worktree-init` will checkout the `documentation` branch in the
-`doc` directory in the repository
+If you execute `git-worktree-init` will checkout the `documentation` branch in the
+`doc` directory in the repository.
