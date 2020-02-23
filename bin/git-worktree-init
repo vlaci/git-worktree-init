@@ -10,11 +10,11 @@ gitconfig () {
 listconfig () {
     while read -r; do
         echo "${REPLY%.*}"
-    done < <(gitconfig --list --name-only)
+    done < <(gitconfig --name-only --get-regexp "worktree\..*\.path")
 }
 
 worktrees=
-mapfile -t worktrees < <(listconfig | uniq)
+mapfile -t worktrees < <(listconfig)
 
 
 setuptree () {
