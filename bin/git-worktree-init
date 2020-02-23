@@ -18,8 +18,15 @@ mapfile -t worktrees < <(listconfig)
 
 
 setuptree () {
-    local ref=$1
-    local path=$2
+    local tree=$1
+
+    local ref=
+    ref="$(gitconfig $tree.ref || true)"
+    local path=
+    path="$(gitconfig $tree.path || true)"
+
+    [[ -n $ref ]] || { echo "'$t.ref' entry is missing"; exit 1; }
+    [[ -n $path ]] || { echo "'$t.path' entry is missing"; exit 1; }
 
     if [[ -e "$path/.git" ]]; then
         local current_ref=
@@ -43,7 +50,7 @@ setuptree () {
 
 init () {
     for t in  "${worktrees[@]}"; do
-        setuptree "$(gitconfig $t.ref)" "$(gitconfig $t.path)"
+        setuptree "$t"
     done
 }
 
